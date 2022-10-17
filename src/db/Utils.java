@@ -71,4 +71,36 @@ public class Utils {
             System.exit(-42);
         }
     }
+
+    public static void inserir () {
+        System.out.println("Informe o nome do produto: ");
+        String nome = teclado.nextLine();
+
+        System.out.println("Informe o preço do(a) " + nome.toUpperCase() + ": ");
+        Float preco = teclado.nextFloat();
+
+        System.out.println("Informe a quantidade do(a) " + nome.toUpperCase() + " em estoque: ");
+        Integer estoque = teclado.nextInt();
+
+        String INSERIR = "INSERT INTO produto (nome, preco, estoque) VALUES (?, ?, ?);";
+        //SQL INJECTION
+
+        try {
+            Connection conn = conectar();
+            PreparedStatement salvar = conn.prepareStatement(INSERIR);
+
+            salvar.setString(1, nome);
+            salvar.setFloat(2, preco);
+            salvar.setInt(3, estoque);
+
+            salvar.executeUpdate();
+            salvar.close();
+            desconectar(conn);
+            System.out.println("O produto " + nome.toUpperCase() + " foi inserido com sucesso.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erro ao inserir produto!");
+            System.exit(-42);
+        }
+    }
 }
