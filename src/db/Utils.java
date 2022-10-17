@@ -140,7 +140,40 @@ public class Utils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Erro ao atualizar produto!");
+            System.out.println("Erro ao atualizar o produto!");
+            System.exit(-42);
+        }
+    }
+
+    public static void deletar () {
+        System.out.println("Informe o codigo do produto que deseja deletar: ");
+        Integer id = Integer.parseInt(teclado.nextLine());
+
+        try {
+            Connection conn = conectar();
+            String BUSCAR_POR_ID = "SELECT * FROM produto WHERE id = ?;";
+            PreparedStatement produto = conn.prepareStatement(BUSCAR_POR_ID);
+
+            produto.setInt(1, id);
+            ResultSet res = produto.executeQuery();
+
+            if (res.next() != false) {
+                String DELETAR = "DELETE * FROM produto WHERE id = ?;";
+                PreparedStatement deletar = conn.prepareStatement(DELETAR);
+
+                deletar.setInt(1, id);
+
+                deletar.executeUpdate();
+                deletar.close();
+                desconectar(conn);
+                System.out.println("O produtos id = " + id + " foi deletado com sucesso.");
+            } else {
+                System.out.println("Erro ao deletar o produto");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erro ao deletar o produto com ID = " + id);
             System.exit(-42);
         }
     }
