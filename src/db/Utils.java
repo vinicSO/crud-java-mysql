@@ -48,14 +48,14 @@ public class Utils {
 
             if (res.next() != false) {
                 System.out.println("Listando produtos...");
-                System.out.println("--------------------");
+                System.out.println("-------------------");
 
                 do {
                     System.out.println("ID: " + res.getInt(1));
                     System.out.println("PRODUTO: " + res.getString(2));
                     System.out.println("PREÇO: " + res.getFloat(3));
                     System.out.println("ESTOQUE: " + res.getInt(4));
-                    System.out.println("--------------------");
+                    System.out.println("-------------------");
                 } while (res.next());
             } else {
                 System.out.println("Não possui registros.");
@@ -158,7 +158,7 @@ public class Utils {
             ResultSet res = produto.executeQuery();
 
             if (res.next() != false) {
-                String DELETAR = "DELETE * FROM produto WHERE id = ?;";
+                String DELETAR = "DELETE FROM produto WHERE id = ?;";
                 PreparedStatement deletar = conn.prepareStatement(DELETAR);
 
                 deletar.setInt(1, id);
@@ -175,6 +175,35 @@ public class Utils {
             e.printStackTrace();
             System.out.println("Erro ao deletar o produto com ID = " + id);
             System.exit(-42);
+        }
+    }
+
+    public static void menu () {
+        System.out.println("===========Gerenciamento de Produtos===========");
+        System.out.println("\n1 - Listar produtos");
+        System.out.println("2 - Inserir produto");
+        System.out.println("3 - Atualizar produto");
+        System.out.println("4 - Deletar produto");
+
+        System.out.println("\nSelecione uma opcao: ");
+
+        Integer opcao = Integer.parseInt(teclado.nextLine());
+
+        switch (opcao) {
+            case 1:
+                listar();
+                break;
+            case 2:
+                inserir();
+                break;
+            case 3:
+                atualizar();
+                break;
+            case 4:
+                deletar();
+                break;
+            default:
+                menu();
         }
     }
 }
