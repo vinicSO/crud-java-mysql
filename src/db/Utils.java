@@ -1,9 +1,6 @@
 package db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.Scanner;
 
 public class Utils {
@@ -100,6 +97,50 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Erro ao inserir produto!");
+            System.exit(-42);
+        }
+    }
+
+    public static void atualizar () {
+        System.out.println("Informe o código do produto que deseja atualizar: ");
+        Integer id = Integer.parseInt(teclado.nextLine());
+
+        String BUSCA_POR_ID = "SELECT * FROM produto WHERE id=?;";
+
+        try {
+            Connection conn = conectar();
+            PreparedStatement produto = conn.prepareStatement(BUSCA_POR_ID);
+            produto.setInt(1, id);
+            ResultSet res = produto.executeQuery();
+
+            if (res.next() != false) {
+                System.out.println("Informe o nome do produto: ");
+                String nome = teclado.nextLine();
+
+                System.out.println("Informe o preço do(a) " + nome.toUpperCase() + ": ");
+                Float preco = teclado.nextFloat();
+
+                System.out.println("Informe a quantidade do(a) " + nome.toUpperCase() + " em estoque: ");
+                Integer estoque = teclado.nextInt();
+
+                String ATUALIZAR = "UPDATE produto SET nome=?, preco=?, estoque=? WHERE id=?;";
+                PreparedStatement upd = conn.prepareStatement(ATUALIZAR);
+
+                upd.setString(1, nome);
+                upd.setFloat(2, preco);
+                upd.setInt(3, estoque);
+                upd.setInt(4, id);
+
+                upd.executeUpdate();
+                upd.close();
+                desconectar(conn);
+                System.out.println("O produto " + nome + " foi atualizado com sucesso.");
+            } else {
+                System.out.println("Não existe produto com ID = " + id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erro ao atualizar produto!");
             System.exit(-42);
         }
     }
