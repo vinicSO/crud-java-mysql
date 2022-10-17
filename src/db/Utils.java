@@ -40,4 +40,35 @@ public class Utils {
             }
         }
     }
+
+    public static void listar() {
+        String BUSCAR_TODOS = "SELECT * FROM produto;";
+
+        try {
+            Connection conn = conectar();
+            PreparedStatement produtos = conn.prepareStatement(BUSCAR_TODOS);
+            ResultSet res = produtos.executeQuery();
+
+            if (res.next() != false) {
+                System.out.println("Listando produtos...");
+                System.out.println("--------------------");
+
+                do {
+                    System.out.println("ID: " + res.getInt(1));
+                    System.out.println("PRODUTO: " + res.getString(2));
+                    System.out.println("PREÇO: " + res.getFloat(3));
+                    System.out.println("ESTOQUE: " + res.getInt(4));
+                    System.out.println("--------------------");
+                } while (res.next());
+            } else {
+                System.out.println("Não possui registros.");
+            }
+            produtos.close();
+            desconectar(conn);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erro ao listar produtos.");
+            System.exit(-42);
+        }
+    }
 }
