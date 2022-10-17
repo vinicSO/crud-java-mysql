@@ -29,4 +29,15 @@ public class Utils {
             return null;
         }
     }
+
+    public static void desconectar (Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (Exception e) {
+                System.out.println("Não foi possível fechar a conexão.");
+                e.printStackTrace();
+            }
+        }
+    }
 }
