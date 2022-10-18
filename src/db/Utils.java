@@ -1,5 +1,7 @@
 package db;
 
+import domain.Produto;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -51,12 +53,16 @@ public class Utils {
                 System.out.println("-------------------");
 
                 do {
-                    System.out.println("ID: " + res.getInt(1));
-                    System.out.println("PRODUTO: " + res.getString(2));
-                    System.out.println("PREÇO: " + res.getFloat(3));
-                    System.out.println("ESTOQUE: " + res.getInt(4));
-                    System.out.println("-------------------");
+                    Produto p = new Produto();
+
+                    p.setId(res.getInt(1));
+                    p.setNome(res.getString(2));
+                    p.setPreco(res.getDouble(3));
+                    p.setEstoque(res.getInt(4));
+
+                    System.out.println(p.toString());
                 } while (res.next());
+                System.out.println("-------------------");
             } else {
                 System.out.println("Não possui registros.");
             }
@@ -99,6 +105,8 @@ public class Utils {
             System.err.println("Erro ao inserir produto!");
             System.exit(-42);
         }
+
+
     }
 
     public static void atualizar () {
