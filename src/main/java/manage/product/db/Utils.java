@@ -1,8 +1,10 @@
-package db;
+package manage.product.db;
 
-import domain.Produto;
+import manage.product.domain.Produto;
+import org.springframework.context.annotation.Bean;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Utils {
@@ -40,7 +42,9 @@ public class Utils {
         }
     }
 
-    public static void listar() {
+    public static ArrayList<Produto> listar() {
+        ArrayList<Produto> list = new ArrayList<>();
+
         String BUSCAR_TODOS = "SELECT * FROM produto;";
 
         try {
@@ -49,9 +53,6 @@ public class Utils {
             ResultSet res = produtos.executeQuery();
 
             if (res.next() != false) {
-                System.out.println("Listando produtos...");
-                System.out.println("-------------------");
-
                 do {
                     Produto p = new Produto();
 
@@ -60,19 +61,20 @@ public class Utils {
                     p.setPreco(res.getDouble(3));
                     p.setEstoque(res.getInt(4));
 
-                    System.out.println(p.toString());
+                    list.add(p);
                 } while (res.next());
-                System.out.println("-------------------");
-            } else {
-                System.out.println("Não possui registros.");
             }
             produtos.close();
             desconectar(conn);
+
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Erro ao listar produtos.");
             System.exit(-42);
         }
+
+        return new ArrayList<>();
     }
 
     public static void inserir () {
